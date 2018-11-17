@@ -60,6 +60,7 @@ import android.app.admin.DevicePolicyManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentCallbacks2;
 import android.content.ComponentName;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -72,7 +73,9 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.UserInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.database.ContentObserver;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.PorterDuff;
@@ -792,6 +795,9 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
 
         createAndAddWindows();
 
+	mCustomSettingsObserver.observe();
+	mCustomSettingsObserver.update();
+
         // Make sure we always have the most current wallpaper info.
         IntentFilter wallpaperChangedFilter = new IntentFilter(Intent.ACTION_WALLPAPER_CHANGED);
         mContext.registerReceiver(mWallpaperChangedReceiver, wallpaperChangedFilter);
@@ -872,6 +878,8 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
         Dependency.get(ActivityStarterDelegate.class).setActivityStarterImpl(this);
 
         Dependency.get(ConfigurationController.class).addCallback(this);
+
+	mCustomSettingsObserver.observe();
     }
 
     // ================================================================================
@@ -942,6 +950,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                     if (mHeadsUpManager.hasPinnedHeadsUp()) {
                         mNotificationPanel.notifyBarPanelExpansionChanged();
                     }
+                    handleCutout(null);
                     mStatusBarView.setBouncerShowing(mBouncerShowing);
                     if (oldStatusBarView != null) {
                         float fraction = oldStatusBarView.getExpansionFraction();
@@ -2252,6 +2261,24 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
                 StyleInterface.OVERLAY_DARK_DEFAULT);
     }
 
+    private void setCutoutOverlay(boolean enable) {
+        try {
+            mOverlayManager.setEnabled("com.potato.overlay.hidecutout",
+                        enable, mLockscreenUserManager.getCurrentUserId());
+        } catch (RemoteException e) {
+            Log.w(TAG, "Failed to handle cutout overlay", e);
+        }
+    }
+
+    private void setStatusBarStockOverlay(boolean enable) {
+        try {
+            mOverlayManager.setEnabled("com.potato.overlay.statusbarstock",
+                        enable, mLockscreenUserManager.getCurrentUserId());
+        } catch (RemoteException e) {
+            Log.w(TAG, "Failed to handle statusbar height overlay", e);
+        }
+    }
+
     @Nullable
     public View getAmbientIndicationContainer() {
         return mAmbientIndicationContainer;
@@ -3428,6 +3455,7 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
 
         mViewHierarchyManager.updateRowStates();
         mScreenPinningRequest.onConfigurationChanged();
+        handleCutout(newConfig);
     }
 
     @Override
@@ -4884,6 +4912,68 @@ public class StatusBar extends SystemUI implements DemoMode, TunerService.Tunabl
             }
         }
     };
+
+    private CustomSettingsObserver mCustomSettingsObserver = new CustomSettingsObserver(mHandler);
+    private class CustomSettingsObserver extends ContentObserver {
+        CustomSettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.DISPLAY_CUTOUT_MODE),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STOCK_STATUSBAR_IN_HIDE),
+                    false, this, UserHandle.USER_ALL);
+        }
+
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+	    super.onChange(selfChange, uri);
+            if (uri.equals(Settings.System.getUriFor(Settings.System.DISPLAY_CUTOUT_MODE)) ||
+                    uri.equals(Settings.System.getUriFor(Settings.System.STOCK_STATUSBAR_IN_HIDE))) {
+                handleCutout(null);
+            }
+
+        }
+
+        public void update() {
+            handleCutout(null);
+        }
+    }
+
+    private void updateStatusBarColors(boolean enable) {
+        if (enable) {
+            if (mStatusBarView != null)
+                mStatusBarView.setBackgroundColor(0xFF000000);
+            if (mKeyguardStatusBar != null)
+                mKeyguardStatusBar.setBackgroundColor(0xFF000000);
+        } else {
+            if (mStatusBarView != null)
+                mStatusBarView.setBackgroundColor(Color.TRANSPARENT);
+            if (mKeyguardStatusBar != null)
+                mKeyguardStatusBar.setBackgroundColor(Color.TRANSPARENT);
+        }
+    }
+
+    private void handleCutout(Configuration newConfig) {
+        boolean immerseMode;
+        if (newConfig == null || newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            immerseMode = Settings.System.getIntForUser(mContext.getContentResolver(),
+                        Settings.System.DISPLAY_CUTOUT_MODE, 0, UserHandle.USER_CURRENT) == 1;
+        } else {
+            immerseMode = false;
+        }
+        final boolean hideCutoutMode = Settings.System.getIntForUser(mContext.getContentResolver(),
+                        Settings.System.DISPLAY_CUTOUT_MODE, 0, UserHandle.USER_CURRENT) == 2;
+        final boolean statusBarStock = Settings.System.getIntForUser(mContext.getContentResolver(),
+                        Settings.System.STOCK_STATUSBAR_IN_HIDE, 1, UserHandle.USER_CURRENT) == 1;
+        updateStatusBarColors(immerseMode);
+        setCutoutOverlay(hideCutoutMode);
+        setStatusBarStockOverlay(hideCutoutMode && statusBarStock);
+    }
 
     public int getWakefulnessState() {
         return mWakefulnessLifecycle.getWakefulness();
