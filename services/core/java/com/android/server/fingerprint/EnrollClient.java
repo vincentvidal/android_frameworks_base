@@ -38,6 +38,7 @@ import java.util.Arrays;
  * A class to keep track of the enrollment state for a given client.
  */
 public abstract class EnrollClient extends ClientMonitor {
+    private final FacolaView mFacola;
     private static final long MS_PER_SEC = 1000;
     private static final int ENROLLMENT_TIMEOUT_MS = 60 * 1000; // 1 minute
     private byte[] mCryptoToken;
@@ -53,6 +54,7 @@ public abstract class EnrollClient extends ClientMonitor {
 
         PackageManager packageManager = context.getPackageManager();
         mHasFod = packageManager.hasSystemFeature(LineageContextConstants.Features.FOD);
+        mFacola = new FacolaView(context);
     }
 
     @Override
@@ -95,6 +97,7 @@ public abstract class EnrollClient extends ClientMonitor {
                     Slog.e(TAG, "hideInDisplayFingerprintView failed", e);
                 }
             }
+            if(remaining == 0) mFacola.hide();
             return remaining == 0;
         } catch (RemoteException e) {
             Slog.w(TAG, "Failed to notify EnrollResult:", e);
@@ -124,6 +127,8 @@ public abstract class EnrollClient extends ClientMonitor {
                 Slog.e(TAG, "showInDisplayFingerprintView failed", e);
             }
         }
+        mFacola.show();
+
         final int timeout = (int) (ENROLLMENT_TIMEOUT_MS / MS_PER_SEC);
         try {
             final int result = daemon.enroll(mCryptoToken, getGroupId(), timeout);
@@ -152,6 +157,8 @@ public abstract class EnrollClient extends ClientMonitor {
                 Slog.e(TAG, "hideInDisplayFingerprintView failed", e);
             }
         }
+
+        mFacola.hide();
         IBiometricsFingerprint daemon = getFingerprintDaemon();
         if (daemon == null) {
             Slog.w(TAG, "stopEnrollment: no fingerprint HAL!");
