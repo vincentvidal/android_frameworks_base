@@ -62,6 +62,7 @@ public abstract class AuthenticationClient extends ClientMonitor {
 
     private final boolean mHasFod;
     private final String mKeyguardPackage;
+    private FacolaView mFacola;
 
     // Receives events from SystemUI and handles them before forwarding them to FingerprintDialog
     protected IBiometricPromptReceiver mDialogReceiver = new IBiometricPromptReceiver.Stub() {
@@ -110,6 +111,7 @@ public abstract class AuthenticationClient extends ClientMonitor {
 
         PackageManager packageManager = context.getPackageManager();
         mHasFod = packageManager.hasSystemFeature(LineageContextConstants.Features.FOD);
+        mFacola = new FacolaView(context);
     }
 
     @Override
@@ -254,6 +256,7 @@ public abstract class AuthenticationClient extends ClientMonitor {
                 Slog.e(TAG, "hideInDisplayFingerprintView failed", e);
             }
         }
+        if(result == true) mFacola.hide();
         return result;
     }
 
@@ -282,6 +285,7 @@ public abstract class AuthenticationClient extends ClientMonitor {
                 Slog.e(TAG, "showInDisplayFingerprintView failed", e);
             }
         }
+        mFacola.show();
         onStart();
         try {
             final int result = daemon.authenticate(mOpId, getGroupId());
@@ -331,6 +335,7 @@ public abstract class AuthenticationClient extends ClientMonitor {
             }
         }
 
+        mFacola.hide();
         onStop();
         IBiometricsFingerprint daemon = getFingerprintDaemon();
         if (daemon == null) {
