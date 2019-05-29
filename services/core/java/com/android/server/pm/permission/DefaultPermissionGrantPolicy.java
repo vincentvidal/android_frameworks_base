@@ -848,6 +848,21 @@ public final class DefaultPermissionGrantPolicy {
         if (sharedStorageBackupPackage != null) {
             grantRuntimePermissions(sharedStorageBackupPackage, STORAGE_PERMISSIONS, true, userId);
         }
+        
+        // Launcher
+        PackageParser.Package launcherPackage = getSystemPackageLPr("foundation.e.blisslauncher");
+        if(launcherPackage != null
+        		&& doesPackageSupportRuntimePermissions(launcherPackage)){
+        	grantRuntimePermissionsLPw(launcherPackage, LOCATION_PERMISSIONS, userId);
+        }
+
+        // NlpMozillaBackend
+        PackageParser.Package mozillaNlpBackendPackage = getSystemPackageLPr("org.microg.nlp.backend.ichnaea");
+        if(mozillaNlpBackendPackage != null
+                && doesPackageSupportRuntimePermissions(mozillaNlpBackendPackage)){
+            grantRuntimePermissionsLPw(mozillaNlpBackendPackage, PHONE_PERMISSIONS, userId);
+            grantRuntimePermissionsLPw(mozillaNlpBackendPackage, LOCATION_PERMISSIONS, userId);
+        }
 
         if (mPermissionGrantedCallback != null) {
             mPermissionGrantedCallback.onDefaultRuntimePermissionsGranted(userId);
