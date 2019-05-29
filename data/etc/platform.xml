@@ -207,6 +207,11 @@
     <!-- Whitelist system providers -->
     <allow-in-power-save-except-idle package="com.android.providers.calendar" />
     <allow-in-power-save-except-idle package="com.android.providers.contacts" />
+    
+    <!-- /e/ default apps -->
+    <allow-in-power-save package="com.google.android.gms" />
+    <allow-in-power-save package="foundation.e.accountmanager" />
+    <allow-in-power-save package="foundation.e.mail" />
 
     <!-- These are the packages that are white-listed to be able to run as system user -->
     <system-user-whitelisted-app package="com.android.settings" />
