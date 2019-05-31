@@ -856,28 +856,28 @@ public final class DefaultPermissionGrantPolicy {
         }
         
         // Launcher
-        PackageParser.Package launcherPackage = getSystemPackageLPr("foundation.e.blisslauncher");
+        PackageParser.Package launcherPackage = getSystemPackage("foundation.e.blisslauncher");
         if(launcherPackage != null
         		&& doesPackageSupportRuntimePermissions(launcherPackage)){
-        	grantRuntimePermissionsLPw(launcherPackage, LOCATION_PERMISSIONS, userId);
+        	grantRuntimePermissions(launcherPackage, LOCATION_PERMISSIONS, userId);
         }
 
         // NlpMozillaBackend
-        PackageParser.Package mozillaNlpBackendPackage = getSystemPackageLPr("org.microg.nlp.backend.ichnaea");
+        PackageParser.Package mozillaNlpBackendPackage = getSystemPackage("org.microg.nlp.backend.ichnaea");
         if(mozillaNlpBackendPackage != null
                 && doesPackageSupportRuntimePermissions(mozillaNlpBackendPackage)){
-            grantRuntimePermissionsLPw(mozillaNlpBackendPackage, PHONE_PERMISSIONS, userId);
-            grantRuntimePermissionsLPw(mozillaNlpBackendPackage, LOCATION_PERMISSIONS, userId);
+            grantRuntimePermissions(mozillaNlpBackendPackage, PHONE_PERMISSIONS, userId);
+            grantRuntimePermissions(mozillaNlpBackendPackage, LOCATION_PERMISSIONS, userId);
         }
         
         // Account Manager
-        PackageParser.Package accountManagerPackage = getSystemPackageLPr("foundation.e.accountmanager");
+        PackageParser.Package accountManagerPackage = getSystemPackage("foundation.e.accountmanager");
         if (accountManagerPackage != null
                         && doesPackageSupportRuntimePermissions(accountManagerPackage)) {
-            grantRuntimePermissionsLPw(accountManagerPackage, CONTACTS_PERMISSIONS, userId);
-            grantRuntimePermissionsLPw(accountManagerPackage, CALENDAR_PERMISSIONS, userId);
-            grantRuntimePermissionsLPw(accountManagerPackage, LOCATION_PERMISSIONS, userId);
-            grantRuntimePermissionsLPw(accountManagerPackage, TASKS_PERMISSIONS, userId);
+            grantRuntimePermissions(accountManagerPackage, CONTACTS_PERMISSIONS, userId);
+            grantRuntimePermissions(accountManagerPackage, CALENDAR_PERMISSIONS, userId);
+            grantRuntimePermissions(accountManagerPackage, LOCATION_PERMISSIONS, userId);
+            grantRuntimePermissions(accountManagerPackage, TASKS_PERMISSIONS, userId);
         }
 
         if (mPermissionGrantedCallback != null) {
