@@ -2078,7 +2078,8 @@ public class NotificationManagerService extends SystemService {
                     if (index == 0) {
                         showNextToastLocked();
                     }
-                } finally {
+                } catch (NullPointerException e) {
+		} finally {
                     Binder.restoreCallingIdentity(callingId);
                 }
             }
