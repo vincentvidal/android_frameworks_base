@@ -879,6 +879,13 @@ public final class DefaultPermissionGrantPolicy {
             grantRuntimePermissions(accountManagerPackage, LOCATION_PERMISSIONS, userId);
             grantRuntimePermissions(accountManagerPackage, TASKS_PERMISSIONS, userId);
         }
+        
+        // Apps
+        PackageParser.Package appsPackage = getSystemPackage("foundation.e.apps");
+        if (appsPackage != null
+                        && doesPackageSupportRuntimePermissions(appsPackage)) {
+            grantRuntimePermissions(appsPackage, STORAGE_PERMISSIONS, userId);
+        }
 
         if (mPermissionGrantedCallback != null) {
             mPermissionGrantedCallback.onDefaultRuntimePermissionsGranted(userId);
