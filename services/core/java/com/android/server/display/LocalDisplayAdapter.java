@@ -633,8 +633,8 @@ final class LocalDisplayAdapter extends DisplayAdapter {
                 return false;
             }
             if (!mSupportedColorModes.contains(colorMode)) {
-                Slog.w(TAG, "Unable to find color mode " + colorMode
-                        + ", ignoring request.");
+                // Slog.w(TAG, "Unable to find color mode " + colorMode
+                //         + ", ignoring request.");
                 return false;
             }
             SurfaceControl.setActiveColorMode(getDisplayTokenLocked(), colorMode);
