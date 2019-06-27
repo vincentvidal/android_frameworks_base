@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2008 The Android Open Source Project
+ * Copyright (C) 2019 e.foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -204,9 +205,9 @@ public class ConnectivityService extends IConnectivityManager.Stub
     public static final String TETHERING_ARG = "tethering";
 
     private static final boolean DBG = true;
-    private static final boolean VDBG = false;
+    private static final boolean VDBG = true;
 
-    private static final boolean LOGD_RULES = false;
+    private static final boolean LOGD_RULES = true;
     private static final boolean LOGD_BLOCKED_NETWORKINFO = true;
 
     // TODO: create better separation between radio types and network types
