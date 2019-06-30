@@ -550,7 +550,7 @@ public class ConnectivityService extends IConnectivityManager.Stub
     private class LegacyTypeTracker {
 
         private static final boolean DBG = true;
-        private static final boolean VDBG = false;
+        private static final boolean VDBG = true;
 
         /**
          * Array of lists, one per legacy network type (e.g., TYPE_MOBILE_MMS).
@@ -2337,6 +2337,11 @@ public class ConnectivityService extends IConnectivityManager.Stub
 
         @Override
         public void handleMessage(Message msg) {
+
+            if (VDBG) {
+                log(String.format("handleMessage >%s<", eventName(msg.what)));
+                }
+
             if (!maybeHandleAsyncChannelMessage(msg) &&
                     !maybeHandleNetworkMonitorMessage(msg) &&
                     !maybeHandleNetworkAgentInfoMessage(msg)) {
