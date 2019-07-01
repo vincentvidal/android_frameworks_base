@@ -285,6 +285,9 @@ public class NetworkAgentInfo implements Comparable<NetworkAgentInfo> {
         mHandler = handler;
         networkMonitor = mConnService.createNetworkMonitor(context, handler, this, defaultRequest);
         networkMisc = misc;
+
+        Log.wtf(TAG, "1)" + name());
+        Log.wtf(TAG, "2)" + toString());
     }
 
     public ConnectivityService connService() {
