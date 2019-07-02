@@ -258,6 +258,8 @@ public class NetworkAgentInfo implements Comparable<NetworkAgentInfo> {
 
         int useNwDNS = android.provider.Settings.System.getInt(context.getContentResolver(), "USE_NETWORK_DNS", 1);
 
+        Log.wtf(TAG, "0) UseNWDNS=" + useNwDNS);
+
         if ( 0 != useNwDNS ) {
 
         } else {
