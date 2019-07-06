@@ -96,7 +96,7 @@ import java.util.stream.Collectors;
  * @hide
  */
 public class IpClient extends StateMachine {
-    private static final boolean DBG = false;
+    private static final boolean DBG = true;
 
     // For message logging.
     private static final Class[] sMessageClasses = { IpClient.class, DhcpClient.class };

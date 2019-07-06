@@ -158,7 +158,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub
     }
 
     private static final String TAG = "NetworkManagement";
-    private static final boolean DBG = Log.isLoggable(TAG, Log.DEBUG);
+    private static final boolean DBG = true;//Log.isLoggable(TAG, Log.DEBUG);
     private static final String NETD_TAG = "NetdConnector";
     static final String NETD_SERVICE_NAME = "netd";
 
@@ -783,21 +783,21 @@ public class NetworkManagementService extends INetworkManagementService.Stub
      */
     private void notifyInterfaceDnsServerInfo(String iface, long lifetime, String[] addresses) {
 
-		int useNwDNS = android.provider.Settings.System.getInt(mContext.getContentResolver(), "USE_NETWORK_DNS", 1);
-		//Slog.i(TAG,"notifyInterfaceDnsServerInfo useNwDNS>"+useNwDNS+"<"); 
-		
-		if ( 0 != useNwDNS ) {
-			// Default
-			invokeForAllObservers(o -> o.interfaceDnsServerInfo(iface, lifetime, addresses));		
-		} else {
-			final String[] xaddresses = new String[1];
-			String s = android.provider.Settings.System.getString(mContext.getContentResolver(), "OVERRIDE_DNS_IP_V4");
-			//Slog.i(TAG,"notifyInterfaceDnsServerInfo Override dnses>"+s+"<");
-			xaddresses[0] = s;
-			invokeForAllObservers(o -> o.interfaceDnsServerInfo(iface, lifetime, xaddresses));
-		}
+        int useNwDNS = android.provider.Settings.System.getInt(mContext.getContentResolver(), "USE_NETWORK_DNS", 1);
+        //Slog.i(TAG,"notifyInterfaceDnsServerInfo useNwDNS>"+useNwDNS+"<");
 
-        
+        if ( 0 != useNwDNS ) {
+            // Default
+            invokeForAllObservers(o -> o.interfaceDnsServerInfo(iface, lifetime, addresses));
+        } else {
+            final String[] xaddresses = new String[1];
+            String s = android.provider.Settings.System.getString(mContext.getContentResolver(), "OVERRIDE_DNS_IP_V4");
+            //Slog.i(TAG,"notifyInterfaceDnsServerInfo Override dnses>"+s+"<");
+            xaddresses[0] = s;
+            invokeForAllObservers(o -> o.interfaceDnsServerInfo(iface, lifetime, xaddresses));
+        }
+
+
     }
 
     /**
