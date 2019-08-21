@@ -4525,20 +4525,32 @@ public final class Settings {
          */
         public static final String SMART_CHARGING = "smart_charging";
 
+	/** @hide */
+	private static final Validator SMART_CHARGING_VALIDATOR = BOOLEAN_VALIDATOR;
+
         /**
          * @hide
          */
         public static final String SMART_CHARGING_RESET_STATS = "smart_charging_reset_stats";
+
+	/** @hide */
+        private static final Validator SMART_CHARGING_RESET_STATS_VALIDATOR = BOOLEAN_VALIDATOR;
 
         /**
          * @hide
          */
         public static final String SMART_CHARGING_LEVEL = "smart_charging_level";
 
+	/** @hide */
+        private static final Validator SMART_CHARGING_LEVEL_VALIDATOR = NON_NEGATIVE_INTEGER_VALIDATOR;
+
         /**
          * @hide
          */
         public static final String SMART_CHARGING_RESUME_LEVEL = "smart_charging_resume_level";
+
+	/** @hide */
+        private static final Validator SMART_CHARGING_RESUME_LEVEL_VALIDATOR = NON_NEGATIVE_INTEGER_VALIDATOR;
 
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
@@ -4674,6 +4686,10 @@ public final class Settings {
             PUBLIC_SETTINGS.add(HAPTIC_FEEDBACK_ENABLED);
             PUBLIC_SETTINGS.add(SHOW_WEB_SUGGESTIONS);
             PUBLIC_SETTINGS.add(VIBRATE_WHEN_RINGING);
+	    PUBLIC_SETTINGS.add(SMART_CHARGING);
+	    PUBLIC_SETTINGS.add(SMART_CHARGING_RESET_STATS);
+	    PUBLIC_SETTINGS.add(SMART_CHARGING_LEVEL);
+	    PUBLIC_SETTINGS.add(SMART_CHARGING_RESUME_LEVEL);
         }
 
         /**
@@ -4819,6 +4835,10 @@ public final class Settings {
             VALIDATORS.put(NOTIFICATION_LIGHT_PULSE, BOOLEAN_VALIDATOR);
             VALIDATORS.put(ACCELEROMETER_ROTATION_ANGLES,
                     ACCELEROMETER_ROTATION_ANGLES_VALIDATOR);
+	    VALIDATORS.put(SMART_CHARGING, SMART_CHARGING_VALIDATOR);
+	    VALIDATORS.put(SMART_CHARGING_RESET_STATS, SMART_CHARGING_RESET_STATS_VALIDATOR);
+	    VALIDATORS.put(SMART_CHARGING_LEVEL, SMART_CHARGING_LEVEL_VALIDATOR);
+	    VALIDATORS.put(SMART_CHARGING_RESUME_LEVEL, SMART_CHARGING_RESUME_LEVEL_VALIDATOR);
         }
 
         /**
