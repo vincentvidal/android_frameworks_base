@@ -24,6 +24,7 @@ import static com.android.internal.logging.nano.MetricsProto.MetricsEvent.APP_TR
 import static com.android.internal.logging.nano.MetricsProto.MetricsEvent.APP_TRANSITION_REPORTED_DRAWN_MS;
 import static com.android.internal.logging.nano.MetricsProto.MetricsEvent.APP_TRANSITION_STARTING_WINDOW_DELAY_MS;
 import static com.android.internal.logging.nano.MetricsProto.MetricsEvent.APP_TRANSITION_WINDOWS_DRAWN_DELAY_MS;
+import static com.android.internal.logging.nano.MetricsProto.MetricsEvent.CUSTOM_SETTINGS;
 import static com.android.internal.logging.nano.MetricsProto.MetricsEvent.FIELD_ACTIVITY_RECORD_FLAGS;
 import static com.android.internal.logging.nano.MetricsProto.MetricsEvent.FIELD_ACTIVITY_RECORD_IS_FULLSCREEN;
 import static com.android.internal.logging.nano.MetricsProto.MetricsEvent.FIELD_ACTIVITY_RECORD_IS_NO_DISPLAY;
